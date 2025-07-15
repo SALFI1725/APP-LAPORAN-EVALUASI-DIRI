@@ -1,0 +1,61 @@
+# File: .github/workflows/generator-generic-ossf-slsa3-publish.yml
+# Alur kerja ini menghasilkan bukti asal-usul (provenance) SLSA Level 3 yang terverifikasi.
+# Untuk informasi lebih lanjut, kunjungi https://github.com/slsa-framework/slsa-github-generator
+
+name: SLSA Generic Generator
+
+on:
+  workflow_dispatch:
+    inputs:
+      # Versi rilis yang akan dibuat, contoh: v1.0.0
+      version:
+        description: 'Versi rilis (contoh: v1.0.0)'
+        required: true
+        type: string
+
+permissions:
+  id-token: write # Diperlukan untuk otentikasi ke Sigstore.
+  contents: write # Diperlukan untuk membuat rilis GitHub.
+  actions: read # Diperlukan untuk membaca alur kerja yang dapat digunakan kembali (reusable workflow).
+
+jobs:
+  # Tugas ini membangun artefak dan menghasilkan provenance untuknya.
+  build:
+    # Menggunakan alur kerja yang dapat digunakan kembali dari SLSA generator.
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.9.0
+    with:
+      # Nama file artefak yang akan dibangun.
+      # Dalam kasus ini, kita menganggap aplikasi HTML sebagai artefak utama.
+      # Anda bisa menggantinya dengan proses build yang lebih kompleks jika diperlukan.
+      base64-subjects: "cGxhaW50ZXh0LWZpbGUuHVR4dAo=" # Placeholder untuk subjek, ganti jika perlu.
+      
+      # Perintah untuk "membangun" aplikasi. 
+      # Karena ini hanya satu file HTML, kita cukup memindahkannya ke direktori artefak.
+      build-command: |
+        # Buat direktori untuk menampung artefak
+        mkdir -p artifacts
+        # Salin file aplikasi utama ke direktori artefak
+        # Ganti 'index.html' dengan nama file aplikasi Anda yang sebenarnya.
+        cp formulir-rekap-ibadah.html artifacts/
+        
+  # Tugas ini mempublikasikan artefak yang telah dibangun.
+  # Ini adalah contoh; Anda bisa menyesuaikannya dengan kebutuhan Anda (misalnya, unggah ke GCS, dll.).
+  publish:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Unduh artefak dari tugas build
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.build.outputs.artifact-name }}
+          path: ./release-artifacts/
+
+      - name: Tampilkan isi artefak
+        run: ls -R ./release-artifacts/
+
+      - name: Buat Rilis GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          files: |
+            ./release-artifacts/*
