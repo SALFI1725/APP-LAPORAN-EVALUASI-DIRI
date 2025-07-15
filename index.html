@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Rekapan Ibadah Kolaboratif</title>
+    <!-- Menggunakan Tailwind CSS untuk styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Menggunakan font Inter dari Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .ibadah-input { min-width: 100px; } /* Atur lebar minimum untuk input */
+        
+        /* CSS untuk animasi teks berjalan (marquee) */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 25s linear infinite;
+        }
+
+        @keyframes marquee {
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        @media print {
+            .no-print { display: none; }
+            #form-section, #rekap-section, footer { display: none; }
+            .printable-rekap { display: block !important; }
+            table, th, td { border: 1px solid black !important; }
+            .bg-gray-50, .bg-gray-100 {
+                background-color: #F9FAFB !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+        }
+        .printable-rekap { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Bagian Formulir Pengisian -->
+        <div id="form-section" class="bg-white rounded-xl shadow-lg p-6 md:p-8 max-w-7xl mx-auto">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Formulir Laporan Amaliyah Yaumiyah</h1>
+                
+                <!-- Teks Ayat Al-Qur'an -->
+                <div class="my-6 p-4 bg-gray-50 rounded-lg">
+                    <p dir="rtl" class="text-2xl md:text-3xl text-right font-serif text-gray-800 leading-relaxed">يٰٓاَيُّهَا الَّذِيْنَ اٰمَنُوا اتَّقُوا اللّٰهَ وَلْتَنْظُرْ نَفْسٌ مَّا قَدَّمَتْ لِغَدٍۚ وَاتَّقُوا اللّٰهَ ۗاِنَّ اللّٰهَ خَبِيْرٌ ۢبِمَا تَعْمَلُوْنَ</p>
+                    <p class="mt-4 text-gray-600 text-sm">"Wahai orang-orang yang beriman! Bertakwalah kepada Allah dan hendaklah setiap diri memperhatikan apa yang telah diperbuatnya untuk hari esok (akhirat), dan bertakwalah kepada Allah. Sungguh, Allah Mahateliti terhadap apa yang kamu kerjakan."</p>
+                    <p class="mt-2 font-semibold text-gray-700 text-sm">Q.S. Al-Hasyr: 18</p>
+                </div>
+
+                <div class="marquee-container mt-3">
+                    <p class="marquee-text text-green-600 italic">"Kita diperintahkan untuk introspeksi, mengevaluasi masa lalu, dan menyiapkan diri agar lebih baik ke depannya."</p>
+                </div>
+                <p class="text-gray-600 mt-2">Isi data Anda, lalu klik "Simpan Laporan" untuk masuk ke tabel rekapitulasi.</p>
+            </div>
+
+            <div class="mb-6">
+                <label for="nama-lengkap" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                <input type="text" id="nama-lengkap" name="nama-lengkap" placeholder="Masukkan nama Anda di sini..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+
+            <form id="form-ibadah">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-3 text-left text-sm font-semibold text-gray-700 border-b">HARI</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">SS QOBLA SUBUH</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">BERJAMAAH SUBUH</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">SOLAT DUHA</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">BACA QURAN</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">SILATURAHMI</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">BACA BUKU</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">SODAKOH HARTA</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">TAHAJUD</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">OLAHRAGA</th>
+                                <th class="p-3 text-center text-sm font-semibold text-gray-700 border-b">CATATAN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabel-ibadah-body"></tbody>
+                        <tfoot id="tabel-ibadah-foot" class="bg-gray-100 font-bold">
+                             <!-- Baris Jumlah akan diisi oleh JavaScript -->
+                        </tfoot>
+                    </table>
+                </div>
+            </form>
+
+            <div class="mt-8 text-center bg-blue-50 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold text-gray-700">Total Poin Keseluruhan Anda:</h3>
+                <p id="total-points" class="text-5xl font-bold text-blue-600 mt-2">0</p>
+            </div>
+
+            <!-- Pesan Status -->
+            <div id="status-message" class="mt-4 text-center text-sm"></div>
+
+            <div class="mt-8 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 no-print">
+                <button type="button" id="reset-btn" class="w-full sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg transition duration-300">Reset Form</button>
+                <button type="button" id="save-btn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300">Simpan Laporan</button>
+            </div>
+        </div>
+
+        <!-- Bagian Tabel Rekapitulasi -->
+        <div id="rekap-section" class="bg-white rounded-xl shadow-lg p-6 md:p-8 max-w-7xl mx-auto mt-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Tabel Rekapitulasi Mingguan</h2>
+                    <p class="text-gray-600 mt-1">Data diperbarui secara otomatis.</p>
+                </div>
+                <div>
+                    <button id="print-rekap-btn" class="no-print bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                        Cetak Rekap
+                    </button>
+                    <button id="show-reset-modal-btn" class="no-print bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ml-2">
+                        Reset Rekap
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white text-xs">
+                    <thead class="bg-gray-50">
+                        <tr id="rekap-header">
+                            <!-- Header Rekap akan diisi oleh JavaScript -->
+                        </tr>
+                    </thead>
+                    <tbody id="rekap-body">
+                        <tr><td colspan="14" class="text-center p-8 text-gray-500">Memuat data rekapitulasi...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Copyright Footer -->
+        <footer class="text-center mt-10 text-xs text-gray-500 no-print">
+            <p>© 2025. Aplikasi ini dilindungi hak cipta.</p>
+            <p>Dibuat khusus untuk <span class="font-bold" style="color: #8a5a44;">Gun-SA-Aulia Store</span>.</p>
+            <p>Dilarang menggunakan atau mendistribusikan tanpa izin.</p>
+        </footer>
+
+    </div>
+    
+    <!-- Template untuk dicetak -->
+    <div class="printable-rekap p-8">
+        <h1 class="text-2xl font-bold text-center mb-4">Rekapitulasi Laporan Ibadah Mingguan</h1>
+        <p class="text-center text-sm mb-6" id="print-date"></p>
+        <table class="w-full border-collapse text-xs">
+             <thead id="print-rekap-header"></thead>
+            <tbody id="print-rekap-body"></tbody>
+        </table>
+    </div>
+
+    <!-- Modal Kata Sandi -->
+    <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50 no-print">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+            <h3 class="text-lg font-bold mb-4">Masukkan Kata Sandi</h3>
+            <p class="text-sm text-gray-600 mb-4">Untuk mereset semua data rekapitulasi, masukkan kata sandi.</p>
+            <input type="password" id="password-input" class="w-full p-2 border rounded-md mb-2" placeholder="****">
+            <p id="password-error" class="text-red-500 text-xs mb-4 hidden">Kata sandi salah. Coba lagi.</p>
+            <div class="flex justify-end space-x-4">
+                <button id="cancel-reset-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg">Batal</button>
+                <button id="confirm-reset-btn" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg">Konfirmasi Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, onSnapshot, query, serverTimestamp, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- KONFIGURASI & INISIALISASI ---
+            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            let userId = null;
+            const laporanCollectionRef = collection(db, 'artifacts', appId, 'public/data', 'laporanIbadah');
+
+            // --- ELEMEN DOM ---
+            const form = document.getElementById('form-ibadah');
+            const tableBody = document.getElementById('tabel-ibadah-body');
+            const tableFoot = document.getElementById('tabel-ibadah-foot');
+            const totalPointsEl = document.getElementById('total-points');
+            const saveBtn = document.getElementById('save-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const nameInput = document.getElementById('nama-lengkap');
+            const rekapHeader = document.getElementById('rekap-header');
+            const rekapBody = document.getElementById('rekap-body');
+            const statusMessage = document.getElementById('status-message');
+            const printRekapBtn = document.getElementById('print-rekap-btn');
+            const printRekapHeader = document.getElementById('print-rekap-header');
+            const printRekapBody = document.getElementById('print-rekap-body');
+            const printDateEl = document.getElementById('print-date');
+            
+            // Elemen Modal
+            const showResetModalBtn = document.getElementById('show-reset-modal-btn');
+            const passwordModal = document.getElementById('password-modal');
+            const passwordInput = document.getElementById('password-input');
+            const passwordError = document.getElementById('password-error');
+            const cancelResetBtn = document.getElementById('cancel-reset-btn');
+            const confirmResetBtn = document.getElementById('confirm-reset-btn');
+
+            const days = ['Jumat', 'Sabtu', 'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis'];
+            const activities = [
+                { key: 'qoblaSubuh', name: 'Q. SUBUH' },
+                { key: 'berjamaahSubuh', name: 'JAMAAH' },
+                { key: 'dhuha', name: 'DUHA' },
+                { key: 'bacaQuran', name: 'QURAN' },
+                { key: 'silaturahmi', name: 'SILAT.' },
+                { key: 'bacaBuku', name: 'BUKU' },
+                { key: 'sodakoh', name: 'SODAKOH' },
+                { key: 'tahajud', name: 'TAHAJUD' },
+                { key: 'olahraga', name: 'OLAHRAGA' },
+            ];
+            const numCols = activities.length;
+
+            // --- FUNGSI-FUNGSI ---
+            function createTable() {
+                const selectHtml = (colIndex) => `
+                    <select data-col="${colIndex}" class="ibadah-input w-full text-center border rounded-md p-1.5 focus:ring-2 focus:ring-blue-500 bg-white">
+                        <option value="0" selected>TIDAK</option>
+                        <option value="1">YA</option>
+                    </select>
+                `;
+                tableBody.innerHTML = days.map(day => `
+                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                        <td class="p-3 font-medium text-gray-800">${day}</td>
+                        ${Array(numCols).fill(0).map((_, colIndex) => `<td class="p-2 text-center">${selectHtml(colIndex)}</td>`).join('')}
+                        <td class="p-2 text-center"><input type="text" placeholder="Catatan..." class="catatan-input w-full text-left border rounded-md p-1 focus:ring-2 focus:ring-blue-500"></td>
+                    </tr>
+                `).join('');
+                
+                tableFoot.innerHTML = `
+                    <tr class="border-t-2 border-gray-300">
+                        <td class="p-3 text-left">JUMLAH</td>
+                        ${Array(numCols).fill(0).map(() => `<td class="p-2 text-center total-col">0</td>`).join('')}
+                        <td class="p-2"></td>
+                    </tr>
+                `;
+            }
+
+            function calculateTotal() {
+                const inputs = document.querySelectorAll('.ibadah-input');
+                const columnTotals = Array(numCols).fill(0);
+                let grandTotal = 0;
+                inputs.forEach(input => {
+                    const col = parseInt(input.dataset.col, 10);
+                    if (input.value === '1') {
+                        if (!isNaN(col)) columnTotals[col]++;
+                        grandTotal++;
+                    }
+                });
+                document.querySelectorAll('.total-col').forEach((cell, index) => {
+                    cell.textContent = columnTotals[index];
+                });
+                totalPointsEl.textContent = grandTotal;
+            }
+            
+            function resetForm() {
+                form.reset();
+                nameInput.value = '';
+                calculateTotal();
+            }
+
+            function showStatus(message, isError = false) {
+                statusMessage.textContent = message;
+                statusMessage.className = `mt-4 text-center text-sm ${isError ? 'text-red-600' : 'text-green-600'}`;
+                setTimeout(() => statusMessage.textContent = '', 4000);
+            }
+
+            async function handleSave() {
+                if (!userId) {
+                    showStatus("Koneksi belum siap, silakan coba lagi.", true);
+                    return;
+                }
+                const nama = nameInput.value.trim();
+                if (!nama) {
+                    showStatus("Nama lengkap wajib diisi!", true);
+                    nameInput.focus();
+                    return;
+                }
+                
+                saveBtn.disabled = true;
+                saveBtn.textContent = 'Menyimpan...';
+
+                const totalPoin = parseInt(totalPointsEl.textContent, 10);
+                const rincianPoin = {};
+                document.querySelectorAll('.total-col').forEach((cell, index) => {
+                    const activityKey = activities[index].key;
+                    rincianPoin[activityKey] = parseInt(cell.textContent, 10);
+                });
+                
+                const catatanInputs = document.querySelectorAll('.catatan-input');
+                const catatanMingguan = Array.from(catatanInputs)
+                    .map(input => input.value.trim())
+                    .filter(catatan => catatan !== '')
+                    .join('; ');
+
+                try {
+                    const docRef = doc(laporanCollectionRef, userId);
+                    await setDoc(docRef, {
+                        nama: nama,
+                        totalPoin: totalPoin,
+                        rincianPoin: rincianPoin,
+                        catatanMingguan: catatanMingguan,
+                        userId: userId,
+                        updatedAt: serverTimestamp()
+                    });
+                    showStatus("Laporan berhasil disimpan dan direkap!", false);
+                    resetForm();
+                } catch (error) {
+                    console.error("Error saving document: ", error);
+                    showStatus("Gagal menyimpan laporan. Periksa koneksi Anda.", true);
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Simpan Laporan';
+                }
+            }
+
+            function renderRekapTable(laporanList) {
+                const headerHtml = `
+                    <tr class="bg-gray-50">
+                        <th class="p-2 text-center font-semibold border-b">#</th>
+                        <th class="p-2 text-left font-semibold border-b">NAMA</th>
+                        <th class="p-2 text-left font-semibold border-b">WAKTU LAPOR</th>
+                        <th class="p-2 text-center font-semibold border-b">TOTAL</th>
+                        ${activities.map(act => `<th class="p-2 text-center font-semibold border-b">${act.name}</th>`).join('')}
+                        <th class="p-2 text-left font-semibold border-b">CATATAN</th>
+                    </tr>`;
+                rekapHeader.innerHTML = headerHtml;
+                printRekapHeader.innerHTML = headerHtml;
+
+                if (laporanList.length === 0) {
+                    const placeholder = `<tr><td colspan="${5 + numCols}" class="text-center p-8 text-gray-500">Belum ada data laporan.</td></tr>`;
+                    rekapBody.innerHTML = placeholder;
+                    printRekapBody.innerHTML = placeholder;
+                    return;
+                }
+                
+                const sortedList = laporanList.sort((a, b) => b.totalPoin - a.totalPoin);
+                
+                const tableHtml = sortedList.map((item, index) => {
+                    const rincian = item.rincianPoin || {};
+                    const date = item.updatedAt ? item.updatedAt.toDate().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : 'N/A';
+                    return `
+                        <tr class="hover:bg-gray-50 border-b">
+                            <td class="p-2 text-center font-bold">${index + 1}</td>
+                            <td class="p-2 text-left font-medium text-gray-800">${item.nama}</td>
+                            <td class="p-2 text-left text-xs">${date}</td>
+                            <td class="p-2 text-center text-lg font-semibold text-blue-600">${item.totalPoin || 0}</td>
+                            ${activities.map(act => `<td class="p-2 text-center">${rincian[act.key] ?? 0}</td>`).join('')}
+                            <td class="p-2 text-left text-xs">${item.catatanMingguan || ''}</td>
+                        </tr>
+                    `;
+                }).join('');
+                rekapBody.innerHTML = tableHtml;
+                printRekapBody.innerHTML = tableHtml;
+            }
+
+            function handlePrintRekap() {
+                printDateEl.textContent = `Dicetak pada: ${new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'long' })}`;
+                window.print();
+            }
+            
+            async function resetRekapData() {
+                showStatus("Mereset data rekapitulasi...", false);
+                try {
+                    const querySnapshot = await getDocs(laporanCollectionRef);
+                    const deletePromises = [];
+                    querySnapshot.forEach((doc) => {
+                        deletePromises.push(deleteDoc(doc.ref));
+                    });
+                    await Promise.all(deletePromises);
+                    showStatus("Semua data rekapitulasi berhasil direset.", false);
+                } catch (error) {
+                    console.error("Error resetting rekap data: ", error);
+                    showStatus("Gagal mereset data. Silakan coba lagi.", true);
+                }
+            }
+
+            // --- MAIN APP LOGIC ---
+            createTable();
+            calculateTotal();
+            renderRekapTable([]);
+
+            form.addEventListener('input', calculateTotal);
+            saveBtn.addEventListener('click', handleSave);
+            resetBtn.addEventListener('click', resetForm);
+            printRekapBtn.addEventListener('click', handlePrintRekap);
+            
+            // Event Listeners untuk Modal
+            showResetModalBtn.addEventListener('click', () => {
+                passwordModal.classList.remove('hidden');
+                passwordInput.value = '';
+                passwordError.classList.add('hidden');
+                passwordInput.focus();
+            });
+
+            cancelResetBtn.addEventListener('click', () => {
+                passwordModal.classList.add('hidden');
+            });
+
+            confirmResetBtn.addEventListener('click', () => {
+                if (passwordInput.value === '4321') {
+                    resetRekapData();
+                    passwordModal.classList.add('hidden');
+                } else {
+                    passwordError.classList.remove('hidden');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            });
+
+            let isListenerAttached = false;
+            onAuthStateChanged(auth, user => {
+                if (user && !isListenerAttached) {
+                    userId = user.uid;
+                    isListenerAttached = true;
+                    onSnapshot(query(laporanCollectionRef), (snapshot) => {
+                        const laporanList = snapshot.docs.map(doc => doc.data());
+                        renderRekapTable(laporanList);
+                    }, (error) => {
+                        console.error("Firestore permission error:", error);
+                    });
+                }
+            });
+
+            (async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (error) {
+                    console.error("Authentication failed:", error);
+                }
+            })();
+        });
+    </script>
+</body>
+</html>
